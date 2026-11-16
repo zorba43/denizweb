@@ -110,7 +110,7 @@
   }
 
   // Açılır/kapanır grup kutuları; açık/kapalı durumu yenilemelerde korunur
-  var groupOpen = { devam: true, tamam: false };
+  var groupOpen = { devam: false, tamam: false };
   function group(key, title, orders, emptyText) {
     var g = el('section', 'cp-group cp-group-' + key + (groupOpen[key] ? ' open' : ''));
     var head = el('button', 'cp-group-head');
