@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Müşteri Girişi | Deniz Kromaj Yüzey Teknoloji</title>
+<meta name="description" content="Deniz Kromaj müşteri girişi: ürünlerinizin hangi istasyonda olduğunu ve istasyon fotoğraflarını görün.">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0a0e13">
+<link rel="icon" href="assets/logo-renkli.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/musteri.css">
+</head>
+<body class="cp">
+
+<header class="header scrolled" id="top">
+  <div class="container">
+    <a href="index.html" class="logo" aria-label="Deniz Kromaj ana sayfa">
+      <img src="assets/logo-beyaz.png" alt="Deniz Kromaj Yüzey Teknoloji" onerror="this.nextElementSibling.hidden=false;this.remove()">
+      <span class="logo-text" hidden>DENİZ KROMAJ<small>YÜZEY TEKNOLOJİ</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="index.html#kaplamalar">Kaplamalar</a>
+      <a href="index.html#surec">Süreç</a>
+      <a href="index.html#iletisim">İletişim</a>
+      <a href="musteri.html" class="active" aria-current="page">Müşteri Girişi</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menüyü aç"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main class="cp-main">
+  <div class="container">
+
+    <!-- GİRİŞ -->
+    <section id="cp-login" class="cp-login" hidden>
+      <span class="eyebrow">Müşteri girişi</span>
+      <h1>Ürünleriniz nerede?</h1>
+      <p class="cp-muted">Size verilen kullanıcı adı ve şifreyle girin; ürünlerinizin hangi istasyonda olduğunu ve istasyon fotoğraflarını görün.</p>
+      <form id="cp-form" class="cp-form" novalidate>
+        <label>Kullanıcı adı
+          <input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+        </label>
+        <label>Şifre
+          <input name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <p id="cp-error" class="cp-error" role="alert" hidden></p>
+        <button class="btn btn-primary" type="submit">Giriş yap</button>
+      </form>
+      <p class="cp-muted cp-small">Hesabınız yoksa veya şifrenizi unuttuysanız bizi arayın: <a href="tel:+905332964610">0533 296 46 10</a></p>
+    </section>
+
+    <!-- PORTAL -->
+    <section id="cp-portal" class="cp-portal" hidden>
+      <div class="cp-head">
+        <div>
+          <span class="eyebrow">Müşteri paneli</span>
+          <h1 id="cp-welcome">Hoş geldiniz</h1>
+        </div>
+        <button id="cp-logout" class="btn" type="button">Çıkış</button>
+      </div>
+      <p id="cp-status" class="cp-muted" role="status"></p>
+      <div id="cp-orders" class="cp-orders"></div>
+      <div class="cp-legend" aria-hidden="true">
+        <span><i class="dot tamam"></i>Tamamlandı</span>
+        <span><i class="dot simdi"></i>Şu an bu aşamada</span>
+        <span><i class="dot bekliyor"></i>Bekliyor</span>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div id="cp-lightbox" class="cp-lightbox" hidden>
+  <button type="button" class="cp-lb-close" aria-label="Kapat">×</button>
+  <img alt="">
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bot">
+      <span>© <span id="yr">2026</span> Deniz Kromaj Yüzey Teknoloji</span>
+      <span><a href="index.html">Ana sayfa</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/musteri.js"></script>
+</body>
+</html>
