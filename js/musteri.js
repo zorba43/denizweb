@@ -110,6 +110,39 @@
     data.orders.forEach(function (o) { box.appendChild(card(o)); });
   }
 
+  // Fotoğraf göstergesi: kamera simgesi + adet + "görmek için tıklayın"
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  function cameraIcon() {
+    var svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    ['M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z'].forEach(function (d) {
+      var p = document.createElementNS(SVG_NS, 'path');
+      p.setAttribute('d', d);
+      svg.appendChild(p);
+    });
+    var c = document.createElementNS(SVG_NS, 'circle');
+    c.setAttribute('cx', '12');
+    c.setAttribute('cy', '13');
+    c.setAttribute('r', '3');
+    svg.appendChild(c);
+    return svg;
+  }
+  function photoHint(n) {
+    var h = el('span', 'cam');
+    var top = el('span', 'cam-top');
+    top.appendChild(cameraIcon());
+    top.appendChild(el('span', null, n + ' fotoğraf'));
+    h.appendChild(top);
+    h.appendChild(el('span', 'cam-cta', 'Fotoğrafları görmek için tıklayın'));
+    return h;
+  }
+
   function card(o) {
     var c = el('article', 'cp-card');
     var top = el('div', 'cp-card-top');
@@ -180,7 +213,7 @@
       b.appendChild(el('i', 'dot ' + st.state));
       b.appendChild(el('span', 'name', st.name));
       if (st.date) b.appendChild(el('span', 'date', fmtShort(st.date)));
-      if (st.photos.length) b.appendChild(el('span', 'cam', '📷 ' + st.photos.length));
+      if (st.photos.length) b.appendChild(photoHint(st.photos.length));
       li.appendChild(b);
       flow.appendChild(li);
     });
