@@ -103,11 +103,53 @@
     var box = $('#cp-orders');
     box.replaceChildren();
     $('#cp-status').textContent = '';
-    if (!data.orders.length) {
-      box.appendChild(el('div', 'cp-empty', 'Şu an aktif bir işiniz bulunmuyor.'));
-      return;
-    }
-    data.orders.forEach(function (o) { box.appendChild(card(o)); });
+    var active = data.orders.filter(function (o) { return o.status === 'aktif'; });
+    var done = data.orders.filter(function (o) { return o.status !== 'aktif'; });
+    box.appendChild(group('devam', 'Devam eden işler', active, 'Şu an devam eden bir işiniz bulunmuyor.'));
+    box.appendChild(group('tamam', 'Tamamlanan işler', done, 'Son 60 günde tamamlanan bir işiniz bulunmuyor.'));
+  }
+
+  // Açılır/kapanır grup kutuları; açık/kapalı durumu yenilemelerde korunur
+  var groupOpen = { devam: true, tamam: false };
+  function group(key, title, orders, emptyText) {
+    var g = el('section', 'cp-group cp-group-' + key + (groupOpen[key] ? ' open' : ''));
+    var head = el('button', 'cp-group-head');
+    head.type = 'button';
+    head.setAttribute('aria-expanded', String(groupOpen[key]));
+    head.setAttribute('aria-controls', 'cp-group-' + key);
+    var t = el('span', 'cp-group-title');
+    t.appendChild(el('i', 'dot ' + (key === 'devam' ? 'simdi' : 'tamam')));
+    t.appendChild(el('span', null, title));
+    head.appendChild(t);
+    var right = el('span', 'cp-group-right');
+    right.appendChild(el('span', 'cp-count', String(orders.length)));
+    right.appendChild(el('span', 'cp-chev', '›'));
+    head.appendChild(right);
+    var body = el('div', 'cp-group-body');
+    body.id = 'cp-group-' + key;
+    body.hidden = !groupOpen[key];
+    if (orders.length) orders.forEach(function (o) { body.appendChild(card(o)); });
+    else body.appendChild(el('div', 'cp-empty', emptyText));
+    head.addEventListener('click', function () {
+      groupOpen[key] = !groupOpen[key];
+      body.hidden = !groupOpen[key];
+      g.classList.toggle('open', groupOpen[key]);
+      head.setAttribute('aria-expanded', String(groupOpen[key]));
+      // gizliyken çizilen akışlarda şu anki aşamayı ortala
+      if (groupOpen[key]) centerCurrent(body);
+    });
+    g.appendChild(head);
+    g.appendChild(body);
+    return g;
+  }
+
+  function centerCurrent(root) {
+    requestAnimationFrame(function () {
+      [].forEach.call(root.querySelectorAll('.cp-flow'), function (flow) {
+        var cur = flow.querySelector('li.simdi');
+        if (cur) flow.scrollLeft = cur.offsetLeft - flow.clientWidth / 2 + cur.clientWidth / 2;
+      });
+    });
   }
 
   // Fotoğraf göstergesi: kamera simgesi + adet + "görmek için tıklayın"
@@ -155,6 +197,10 @@
     if (o.delivered) {
       eta.appendChild(el('small', null, 'Teslim edildi'));
       eta.appendChild(el('strong', null, o.deliveredAt ? fmtDay(o.deliveredAt) + ' ✓' : '✓'));
+    } else if (o.status === 'sevke_hazir') {
+      eta.className = 'cp-eta done';
+      eta.appendChild(el('small', null, 'Üretim tamamlandı'));
+      eta.appendChild(el('strong', null, 'Sevke hazır ✓'));
     } else {
       eta.appendChild(el('small', null, 'Tahmini teslim'));
       eta.appendChild(el('strong', null, o.eta ? fmtDay(o.eta) : 'Hesaplanıyor'));
@@ -225,10 +271,7 @@
     else delete openStation[o.orderNo];
 
     // Şu anki aşamayı görünür yap (uzun rotalarda yatay kaydırma)
-    requestAnimationFrame(function () {
-      var cur = flow.querySelector('li.simdi');
-      if (cur) flow.scrollLeft = cur.offsetLeft - flow.clientWidth / 2 + cur.clientWidth / 2;
-    });
+    centerCurrent(c);
     return c;
   }
 
