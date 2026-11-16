@@ -74,13 +74,9 @@
   });
   $$('#quote input, #quote textarea').forEach(i => i.addEventListener('input', () => i.closest('.field').classList.remove('bad')));
 
-  // tesis videosu: görünürken sessiz oynat, çıkınca durdur
+  // tanıtım filmi: ekrandan çıkınca durdur
   const tv = $('#tesis-video');
-  if (tv && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) { tv.preload = 'auto'; tv.play().catch(() => {}); } else tv.pause();
-    }), { threshold: .35 }).observe(tv);
-  }
+  if (tv) new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) tv.pause(); }), { threshold: 0 }).observe(tv);
 
   $('#yr').textContent = new Date().getFullYear();
 })();
